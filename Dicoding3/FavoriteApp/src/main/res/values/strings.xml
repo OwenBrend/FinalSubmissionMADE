@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyFavoriteApp</string>
+    <string name="Home">Home</string>
+    <string name="date_release">date release</string>
+    <string name="popularity">popularity</string>
+    <string name="rating">rating</string>
+    <string name="count">count</string>
+    <string name="language">language</string>
+    <string name="detail">detail</string>
+    <string name="title_movie">movie title</string>
+</resources>

@@ -9,6 +9,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.submission3.db.DatabaseContract;
 import com.example.submission3.db.FavoriteHelper;
 
 import java.util.Objects;
@@ -27,9 +28,11 @@ public class MovieProfider  extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, TABLE_FAV + "/#", MOVIE_ID);
     }
 
+
     @Override
     public boolean onCreate() {
         favoriteHelper = FavoriteHelper.getInstance(getContext());
+        favoriteHelper.open();
         return true;
     }
 
@@ -61,16 +64,53 @@ public class MovieProfider  extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        long added;
+        switch (sUriMatcher.match(uri)){
+            case MOVIE:
+                added= favoriteHelper.insertProvider(values);
+                break;
+                default:
+                    added=0;
+                    break;
+        }
+        if(added>0){
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+        return uri.parse(CONTENT_URI+"/"+added);
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        int deleted;
+        switch (sUriMatcher.match(uri)){
+            case MOVIE_ID:
+                deleted = favoriteHelper.deleteProvider(uri.getLastPathSegment());
+                break;
+            default:
+                deleted = 0;
+                break;
+        }
+        if (deleted>0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return deleted;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+       int updated;
+       switch (sUriMatcher.match(uri)){
+           case  MOVIE_ID:
+                   updated = favoriteHelper.updateProvider(uri.getLastPathSegment(),values);
+           break;
+           default:
+               updated= 0;
+               break;
+       }
+       if (updated>0){
+           getContext().getContentResolver().notifyChange(uri,null);
+       }
+       return updated;
     }
+
 }

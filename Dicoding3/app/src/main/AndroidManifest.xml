@@ -4,6 +4,10 @@
     package="com.example.submission3">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <permission android:name="com.example.submission3.READ_DATABASE"
+        android:protectionLevel="normal"/>
+    <permission android:name="com.example.submission3.WRITE_DATABASE"
+        android:protectionLevel="normal"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +28,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_favorit_info" />
         </receiver>
+        <service
+            android:name=".widget.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity android:name=".activity.Notification" />
         <activity
